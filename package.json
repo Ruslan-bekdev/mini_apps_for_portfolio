@@ -2,10 +2,12 @@
   "name": "mini_apps",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://toopik-ruslan.github.io/mini_apps_for_portfolio/",
+  "homepage": "https://ruslan-bekdev.github.io/mini_apps_for_portfolio/",
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.15.4",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",

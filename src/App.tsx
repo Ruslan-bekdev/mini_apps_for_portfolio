@@ -1,7 +1,27 @@
 import './App.css';
 import React,{FC} from 'react';
-import {Routes,Route} from "react-router-dom";
+import {Routes, Route, Link as LinkRoute, useLocation} from "react-router-dom";
 import {pagesConfig, PageConfig} from "./configs/route";
+import styled from "styled-components";
+import {colors, margins, start_fixed} from "./styles/styles";
+
+const Link = styled(LinkRoute)`
+    color: ${colors.secondaryLight};
+    ${start_fixed};
+    top: ${margins.innerBlock};
+    left: ${margins.innerBlock};
+    &::before{
+      content: '<';
+    }
+`;
+
+const ToHomeLink:FC|null = () => {
+    const location = useLocation();
+    const isNotMainPage = location.pathname !== '/';
+
+    return isNotMainPage ?<Link to='/'>На главную</Link> :null
+};
+
 
 const App:FC = () => {
     const RenderRoutes:FC = () => {
@@ -21,6 +41,7 @@ const App:FC = () => {
 
     return(
         <div className='App'>
+            <ToHomeLink/>
             <RenderRoutes/>
         </div>
     )

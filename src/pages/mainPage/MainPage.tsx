@@ -4,10 +4,7 @@ import {container} from "../../styles/styles";
 import RenderAccordion from "./RenderAccordion";
 
 const Main = styled.div`
-  width: 100vw;
-  height: 100vh;
-  box-sizing: border-box;
-  ${container}
+    ${container}
 `;
 
 const MainPage:FC = () => {

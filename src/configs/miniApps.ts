@@ -1,5 +1,4 @@
 import React from "react";
-import international from '../assets/icons/international.svg';
 
 export interface MiniAppActions {
     url: string;
@@ -17,7 +16,7 @@ export const miniAppsConfig:MiniAppsConfig[] = [
         header: 'Калькулятор',
         icons: 'html,css',
         actions: {
-            url: international,
+            url: '/calc',
             label: 'Вперед',
         },
     },

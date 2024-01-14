@@ -1,11 +1,12 @@
 import React, {FC, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
 import {miniAppsConfig} from "../../configs/miniApps";
 import styled from "styled-components";
 import {colors, margins} from "../../styles/styles";
 import {Accordion as Accord, AccordionDetails, AccordionSummary} from "@mui/material";
 import IconButton from "../../components/other/IconButton";
-import TooltipImg from "../../components/other/TooltipImage";
-
+import TooltipImage from "../../components/other/TooltipImage";
+import international from '../../assets/icons/international.svg';
 
 const Accordion = styled(Accord)`
     background-color: ${colors.secondaryDark} !important;
@@ -16,35 +17,42 @@ const AccordionWrapper = styled.div`
     margin-top: ${margins.title};
 `;
 const AccordionSum = styled(AccordionSummary)`
-    
+    h2{
+      position: relative;
+      color: ${colors.mainLight};
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      transition: text-decoration-color 0.3s ease;
+     }
+    &:hover h2{
+        text-decoration-color: inherit;
+    }
 `;
 const AccordionDet = styled(AccordionDetails)`
     text-align: left;
-  >div{
-    >*:not(:first-child){
-      margin-top: ${margins.innerBlock};
+    >div{
+        >*:not(:first-child){
+            margin-top: ${margins.innerBlock};
+        }
     }
-  }
-`;
-const TooltipImage = styled(TooltipImg)`
-    margin: ${margins.block}px auto !important;
-    display: none; //для проверки
 `;
 
 const RenderAccordion:FC = () => {
+    const navigate = useNavigate();
     const [expanded, setExpanded] = useState<number | false>(false);
 
     const handleChange = (panelIndex: number, isExpanded: boolean) => {
         setExpanded(isExpanded ?panelIndex :false);
     };
     const navigateTo = (url:string) => {
-        window.open(url,'_blank');
+        navigate(url);
     };
 
     return (
         <AccordionWrapper>
             {miniAppsConfig.map((item, index) => {
-                const {header,icons, actions} = item;
+                const {header,icons,actions} = item;
+                console.log(icons)
                 return(
                     <Accordion
                         key={index}
@@ -57,10 +65,10 @@ const RenderAccordion:FC = () => {
                         <AccordionDet>
                             <div >
                                 <p>Используются такие инструменты как:</p>
-                                <TooltipImage title='lol' icons={icons} placement={'top'} />
+                                <TooltipImage title={icons} icons={icons} placement='top' />
                                 <IconButton
                                     label={actions.label}
-                                    icon={actions.url}
+                                    icon={international}
                                     iconLocation='before'
                                     onClick={()=>navigateTo(actions.url)}
                                 />

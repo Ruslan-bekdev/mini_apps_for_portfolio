@@ -4,7 +4,7 @@ export type StringOnly = Record<string, string>
 
 export const colors: StringOnly = {
     mainDark: '#161513',
-    secondaryDark: '#1C1C22',
+    secondaryDark: '#323232FF',
     mainLight: '#E3E0DEFF',
     secondaryLight: '#B5B5BBFF',
 };
@@ -20,6 +20,7 @@ export const container = css`
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+  box-sizing: border-box;
 `;
 export const imageDefault = css`
     width: auto;
@@ -55,6 +56,16 @@ export const flexCenter_column = css`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+`;
+export const flexStart = css`
+    display: flex;
+    align-items: center;
+    justify-content: start;
+`;
+export const flexEnd = css`
+    display: flex;
+    align-items: center;
+    justify-content: end;
 `;
 
 // остальное позиционирование

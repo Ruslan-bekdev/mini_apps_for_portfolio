@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+a {
+    text-decoration: none;
+}
+
 
 html {
     font-size: 16px;
