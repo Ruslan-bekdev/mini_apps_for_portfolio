@@ -1,7 +1,12 @@
-import React, {FC} from 'react';
+import React, {Dispatch, FC} from 'react';
+import {UnknownAction} from "redux";
 import styled from "styled-components";
 import {flexStart} from "../../styles/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+
+interface RenderMenuProps {
+    dispatch: Dispatch<UnknownAction>;
+}
 
 const CalcMenu = styled.div`
   width: 100%;
@@ -16,7 +21,7 @@ const Burger = styled(MenuIcon)`
     cursor: pointer;
 `;
 
-const RenderMenu:FC = () => {
+const RenderMenu:FC<RenderMenuProps> = ({dispatch}) => {
     return(
         <CalcMenu>
             <Burger/>

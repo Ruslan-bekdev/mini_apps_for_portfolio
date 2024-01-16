@@ -9,18 +9,19 @@ export const colors: StringOnly = {
     secondaryLight: '#B5B5BBFF',
 };
 export const margins: StringOnly = {
-    title: '50px',
-    block: '25px',
-    innerBlock: '12.5px',
+    title: '25px',
+    block: '12.5px',
+    innerBlock: '6.25px',
 };
 
 export const container = css`
     width: 100vw;
+    height: 100dvh;
     max-width: 950px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
-  box-sizing: border-box;
+    box-sizing: border-box;
 `;
 export const imageDefault = css`
     width: auto;
