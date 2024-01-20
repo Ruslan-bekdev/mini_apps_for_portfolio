@@ -24,7 +24,7 @@ const Burger = styled(MenuIcon)`
 const RenderMenu:FC<RenderMenuProps> = ({dispatch}) => {
     return(
         <CalcMenu>
-            <Burger/>
+            <Burger fontSize='large'/>
             <b>Обычный</b>
         </CalcMenu>
     )

@@ -1,88 +1,97 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export type PreResult = (number|string)[]
+export type PreResult = string[]
 
 interface CalculatorState {
     preResult: PreResult,
     result: number,
+    maxDecimalDigits: number | null,
 }
 
 const initialState: CalculatorState = {
-    preResult: [0],
+    preResult: ['0'],
     result: 0,
+    maxDecimalDigits: 8,
 };
 
+export const isNumber = (value: string | number) => !isNaN(+value);
+
 const calculatorSlice = createSlice({
-    name: 'calculatorSlice',
-    initialState,
     reducers: {
         setValue: (state, action: PayloadAction<number | string>) => {
+            const payload = action.payload;
             const lastValueIndex = state.preResult.length - 1;
             const lastValue = state.preResult[lastValueIndex];
 
-            switch (typeof action.payload) {
-                case "string":{
-                    if (typeof lastValue === 'number' && lastValue === 0 && action.payload === '-') {
-                        state.preResult = [...state.preResult, action.payload];
-                    } else if (typeof lastValue === 'string' && lastValue === '%' && action.payload !== '%') {
-                        state.preResult = [...state.preResult, action.payload];
-                    } else if (typeof lastValue === 'number' && action.payload === '.' && !lastValue.toString().includes('.')) {
-                        state.preResult[lastValueIndex] = `${lastValue}${action.payload}`;
-                    } else if (typeof lastValue === 'number') {
-                        if (action.payload === '.') {
-                            const currentNumberString = lastValue.toString();
-                            const dotCount = currentNumberString.split('.').length - 1;
-                            if (dotCount === 0) {
-                                state.preResult = [...state.preResult, action.payload];
-                            }
-                        } else {
-                            state.preResult = [...state.preResult, action.payload];
-                        }
+            if (lastValue === '0' && lastValueIndex === 0) {
+                isNumber(payload)
+                    ?state.preResult[lastValueIndex] = payload.toString()
+                    :state.preResult = [...state.preResult, payload.toString()];
+            } else if (isNumber(lastValue) && !isNumber(payload)) {
+                switch (payload) {
+                    case '%':{
+                        const percentCalculate =
+                            (+lastValue / 100 * (+state.preResult[lastValueIndex - 2] || 1));
+
+                        state.preResult[lastValueIndex] = percentCalculate.toString();
+                        break;
                     }
-                    break;
-                }
-                case "number": {
-                    if (typeof state.preResult[lastValueIndex] === 'number') {
-                        state.preResult[lastValueIndex] =
-                            +`${lastValue}${action.payload}`;
-                    } else if (typeof state.preResult[lastValueIndex] === 'number' && lastValueIndex === 0 && lastValue === 0) {
-                        state.preResult[lastValueIndex] = action.payload;
-                    } else {
-                        state.preResult = [...state.preResult,action.payload];
+                    case '.':{
+                        if (!lastValue.includes('.'))
+                            state.preResult[lastValueIndex] += payload;
+                        break;
                     }
+                    default:
+                        state.preResult = [...state.preResult, payload.toString()];
                 }
+            } else if (isNumber(lastValue) && isNumber(payload)) {
+                state.preResult[lastValueIndex] += payload;
+            } else if (isNumber(lastValue) || isNumber(payload)) {
+                state.preResult = [...state.preResult, payload.toString()];
             }
-            // console.log(state.preResult)
         },
-        setResult: (state, action: PayloadAction<number>) => {
-            state.result = action.payload;
+        preResultRounding: (state) => {
+            const removeLastZeros = () => {
+                state.preResult = state.preResult.map((value) => {
+                    const roundedNumber = (+value).toPrecision(state.maxDecimalDigits || undefined);
+                    return isNumber(value) && value.includes('.')
+                        ?roundedNumber.replace(/0+$/, '')
+                        :value;
+                });
+            };
+            removeLastZeros();
         },
         handleBackspace: (state) => {
-            console.log(state.preResult)
-            const lastValueIndex = state.preResult.length - 1;
-            const lastValue = state.preResult[lastValueIndex];
-
-            if (typeof lastValue === 'string' && lastValue.length > 1) {
-                state.preResult[lastValueIndex] = lastValue.slice(0, -1);
-            } else if (state.preResult.length > 1) {
-                state.preResult.pop();
-            }
+            state.preResult.length === 1
+                ?state.preResult = ['0']
+                :state.preResult.pop();
+        },
+        setResult: (state, action: PayloadAction<number>) => {
+            const roundedNumber =
+                Number(action.payload.toFixed(
+                    state.maxDecimalDigits
+                    || undefined
+                ));
+            state.result = roundedNumber;
         },
         resetPreResult: (state) => {
-            state.preResult = [0];
+            state.preResult = ['0'];
         },
         resetResult: (state) => {
             state.result = 0;
         },
         resetAll: (state) => {
-            state.preResult = [0,];
+            state.preResult = ['0'];
             state.result = 0;
         },
     },
+    name: 'calculatorSlice',
+    initialState,
 });
 
 export const {
-    setValue,setResult,handleBackspace,
+    setValue,handleBackspace,
+    setResult,preResultRounding,
     resetPreResult,resetResult,resetAll
 } = calculatorSlice.actions;
 

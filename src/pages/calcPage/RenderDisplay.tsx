@@ -11,12 +11,14 @@ interface RenderDisplayProps {
 
 const DisplayWrapper = styled.div`
   width: 100%;
-  padding: 5px;
   box-sizing: border-box;
-  overflow-x: auto;
-    .value{
-      text-align: right;
-    }
+  display: flex;
+
+  .value {
+    width: 100%;
+    padding: 20px 5px;
+    overflow-x: auto;
+  }
 `;
 
 const RenderDisplay: FC<RenderDisplayProps> = ({preResult,result,dispatch}) => {

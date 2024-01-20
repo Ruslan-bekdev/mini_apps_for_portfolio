@@ -8,9 +8,9 @@ import {buttonsConfig, dispatchActionTypes, Operator} from "../../../configs/cal
 
 interface RenderButtonsProps {
     setValue: (value: string | number) => any,
-    resetAll: () => any,
-    setResult: () => any,
     handleBackspace: () => any,
+    setResult: () => any,
+    resetAll: () => any,
     buttonsWidth: number,
 }
 
@@ -73,23 +73,19 @@ const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
   }
 `;
 
-const RenderButtons:FC<RenderButtonsProps> = ({setValue,setResult,resetAll,handleBackspace,buttonsWidth}) => {
+const RenderButtons:FC<RenderButtonsProps> = ({setValue,handleBackspace,setResult,resetAll,buttonsWidth}) => {
     const handleClick = (operator) => {
         switch (operator.dispatchAction) {
             case dispatchActionTypes.backspace: {
                 handleBackspace();
                 break;
             }
-            case dispatchActionTypes.reset: {
-                resetAll();
-                break;
-            }
-            case dispatchActionTypes.module: {
-                console.log('module');
-                break;
-            }
             case dispatchActionTypes.equal: {
                 setResult();
+                break;
+            }
+            case dispatchActionTypes.reset: {
+                resetAll();
                 break;
             }
             default: setValue(operator.value);

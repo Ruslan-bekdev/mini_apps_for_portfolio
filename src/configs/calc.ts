@@ -2,7 +2,7 @@ export const dispatchActionTypes = {
     backspace: 'backspace',
     reset: 'reset',
     percent: 'percent',
-    module: 'module',
+    power: 'power',
     point: 'point',
     equal: 'equal',
 } as const;
@@ -35,7 +35,7 @@ export const buttonsConfig: ButtonsConfig = {
             {value: '-',},
             {value: '+',},
             {
-                value: '+/-', dispatchAction: 'module',
+                value: '**', dispatchAction: 'power',
                 className: 'positionAction positionAction1',
             },
             {
