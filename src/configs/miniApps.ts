@@ -1,47 +1,33 @@
-import React from "react";
-
-export interface MiniAppActions {
-    url: string;
-    label: string;
-}
+import React, {createElement, ReactElement} from "react";
+import Calculator from "../apps/calculator/Calculator";
+import Weather from "../apps/weather/Weather";
+import Currency from "../apps/converter/currency/Currency";
 
 export interface MiniAppsConfig {
     header: string;
-    icons: string;
-    actions: MiniAppActions;
+    path: string;
+    element: ReactElement;
 }
 
 export const miniAppsConfig:MiniAppsConfig[] = [
     {
         header: 'Калькулятор',
-        icons: 'html,css',
-        actions: {
-            url: '/calc',
-            label: 'Вперед',
-        },
+        path: '/calc',
+        element: createElement(Calculator),
     },
     {
-        header: '2',
-        icons: 'html,css',
-        actions: {
-            url: '#',
-            label: 'Вперед',
-        },
+        header: 'Погода',
+        path: '/weather',
+        element: createElement(Weather),
     },
     {
-        header: '3',
-        icons: 'html,css',
-        actions: {
-            url: '#',
-            label: 'Вперед',
-        },
+        header: 'Конвертеры',
+        path: '/convertor',
+        element: createElement(Currency),
     },
     {
-        header: '4',
-        icons: 'html,css',
-        actions: {
-            url: '#',
-            label: 'Вперед',
-        },
+        header: 'Часы',
+        path: '#',
+        element: createElement(Calculator),
     },
-]
+];

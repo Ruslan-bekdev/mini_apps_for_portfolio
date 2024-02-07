@@ -1,5 +1,4 @@
 import React, {Dispatch, FC} from 'react';
-import {UnknownAction} from "redux";
 import {Operator} from "../../../configs/calc";
 
 interface RenderOperatorsProps {

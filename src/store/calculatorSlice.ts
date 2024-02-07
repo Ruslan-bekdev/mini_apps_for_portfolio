@@ -6,12 +6,14 @@ interface CalculatorState {
     preResult: PreResult,
     result: number,
     maxDecimalDigits: number | null,
+    errorMessage: string | null,
 }
 
 const initialState: CalculatorState = {
     preResult: ['0'],
     result: 0,
     maxDecimalDigits: 8,
+    errorMessage: null,
 };
 
 export const isNumber = (value: string | number) => !isNaN(+value);
@@ -50,17 +52,6 @@ const calculatorSlice = createSlice({
                 state.preResult = [...state.preResult, payload.toString()];
             }
         },
-        preResultRounding: (state) => {
-            const removeLastZeros = () => {
-                state.preResult = state.preResult.map((value) => {
-                    const roundedNumber = (+value).toPrecision(state.maxDecimalDigits || undefined);
-                    return isNumber(value) && value.includes('.')
-                        ?roundedNumber.replace(/0+$/, '')
-                        :value;
-                });
-            };
-            removeLastZeros();
-        },
         handleBackspace: (state) => {
             state.preResult.length === 1
                 ?state.preResult = ['0']
@@ -72,7 +63,14 @@ const calculatorSlice = createSlice({
                     state.maxDecimalDigits
                     || undefined
                 ));
-            state.result = roundedNumber;
+            const removeLastZeros = roundedNumber.toString().replace(/0+$/, '');
+            state.result = +removeLastZeros;
+        },
+        setError: (state, action: PayloadAction<string>) => {
+            state.errorMessage = action.payload;
+        },
+        resetError: (state) => {
+            state.errorMessage = null;
         },
         resetPreResult: (state) => {
             state.preResult = ['0'];
@@ -90,9 +88,10 @@ const calculatorSlice = createSlice({
 });
 
 export const {
-    setValue,handleBackspace,
-    setResult,preResultRounding,
-    resetPreResult,resetResult,resetAll
+    setValue,setResult, setError,
+    handleBackspace,
+    resetPreResult,resetResult,resetAll,
+    resetError,
 } = calculatorSlice.actions;
 
 export default calculatorSlice.reducer;

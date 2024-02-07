@@ -1,10 +1,9 @@
 import React,{FC} from 'react';
 import styled from "styled-components";
 import {colors, flexCenter} from "../../styles/styles";
-import international from '../../assets/icons/international.svg'
 
 interface IconButtonProps {
-    label: string,
+    label?: string,
     icon: string,
     alt?: string,
     iconLocation: 'before' | 'after',
@@ -37,9 +36,15 @@ const Button = styled.button`
 const IconButton:FC<IconButtonProps> = ({label,icon,alt,iconLocation,onClick}) => {
     return(
         <Button onClick={onClick}>
-            {iconLocation === 'before' && <img src={icon} alt={alt}/>}
-            <span>{label}</span>
-            {iconLocation === 'after' && <img src={icon} alt={alt}/>}
+            {iconLocation === 'before' &&
+                <img src={icon} alt={alt}/>
+            }
+            {label &&
+                <span>{label}</span>
+            }
+            {iconLocation === 'after' &&
+                <img src={icon} alt={alt}/>
+            }
         </Button>
     )
 }

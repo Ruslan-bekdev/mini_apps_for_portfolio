@@ -2,6 +2,14 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 import {Tooltip} from "@mui/material";
 
+type TooltipPlacement = typeof allPlacement[number];
+
+interface TooltipImageProps{
+    title:string,
+    placement?:TooltipPlacement,
+    image:string,
+    alt?:string,
+}
 const Image = styled.img`
   transition: transform 0.2s ease-in-out;
   &:hover{
@@ -19,19 +27,11 @@ const getAllPlacements = () => {
 };
 const allPlacement = getAllPlacements();
 
-type TooltipPlacement = typeof allPlacement[number];
 
-interface TooltipImageProps{
-    title:string,
-    placement?:TooltipPlacement,
-    icons:string,
-    alt?:string,
-}
-
-const TooltipImage:FC<TooltipImageProps> = ({title,placement,icons,alt}) => {
+const TooltipImage:FC<TooltipImageProps> = ({title,placement,image,alt}) => {
     return(
         <Tooltip title={title} arrow placement={placement}>
-            <Image src={`https://skillicons.dev/icons?i=${icons}`} alt={alt}/>
+            <Image src={image} alt={alt}/>
         </Tooltip>
     );
 };

@@ -1,12 +1,12 @@
 import React, {FC, useState} from 'react';
 import {useNavigate} from 'react-router-dom'
-import {miniAppsConfig} from "../../configs/miniApps";
+import {miniAppsConfig} from "../configs/miniApps";
 import styled from "styled-components";
-import {colors, margins} from "../../styles/styles";
+import {colors, margins} from "../styles/styles";
 import {Accordion as Accord, AccordionDetails, AccordionSummary} from "@mui/material";
-import IconButton from "../../components/other/IconButton";
-import TooltipImage from "../../components/other/TooltipImage";
-import international from '../../assets/icons/international.svg';
+import IconButton from "../components/other/IconButton";
+import TooltipImage from "../components/other/TooltipImage";
+import international from '../assets/icons/international.svg';
 
 const Accordion = styled(Accord)`
     background-color: ${colors.secondaryDark} !important;
@@ -41,18 +41,18 @@ const RenderAccordion:FC = () => {
     const navigate = useNavigate();
     const [expanded, setExpanded] = useState<number | false>(false);
 
-    const handleChange = (panelIndex: number, isExpanded: boolean) => {
+    const handleChange = (panelIndex: number, isExpanded: boolean): void => {
         setExpanded(isExpanded ?panelIndex :false);
     };
-    const navigateTo = (url:string) => {
+    const navigateTo = (url:string): void => {
         navigate(url);
     };
 
     return (
         <AccordionWrapper>
             {miniAppsConfig.map((item, index) => {
-                const {header,icons,actions} = item;
-                console.log(icons)
+                const {header,path} = item;
+
                 return(
                     <Accordion
                         key={index}
@@ -64,13 +64,12 @@ const RenderAccordion:FC = () => {
                         </AccordionSum>
                         <AccordionDet>
                             <div >
-                                <p>Используются такие инструменты как:</p>
-                                <TooltipImage title={icons} icons={icons} placement='top' />
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate eaque id ipsum pariatur perspiciatis!</p>
                                 <IconButton
-                                    label={actions.label}
+                                    label='Вперед'
                                     icon={international}
                                     iconLocation='before'
-                                    onClick={()=>navigateTo(actions.url)}
+                                    onClick={()=>navigateTo(path)}
                                 />
                             </div>
                         </AccordionDet>
