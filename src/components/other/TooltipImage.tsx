@@ -12,8 +12,15 @@ interface TooltipImageProps{
 }
 const Image = styled.img`
   transition: transform 0.2s ease-in-out;
-  &:hover{
-    transform: scale(1.1);
+  @media (hover: hover) {
+    &:hover{
+      transform: scale(1.1);
+    }
+  }
+  @media (hover: none) {
+    &:active{
+      transform: scale(1.1);
+    }
   }
 `;
 

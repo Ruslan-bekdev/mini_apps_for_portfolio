@@ -5,17 +5,15 @@ import {RootState} from "../../../store";
 import {useDispatch} from "react-redux";
 import {useFetch} from "../../../components/requests";
 import {flexCenter, colors} from "../../../styles/styles";
+import LoadingSpinner from "../../../components/other/LoadingSpinner";
 import {
     setCurrList,
-    setCurr1, setCurr1Value,
-    setCurr2, setCurr2Value,
+    setCurr1,
+    setCurr2,
+    setCurr1Value,
+    setCurr2Value,
     setEmptyValue,
 } from "../../../store/currencySlice";
-import LoadingSpinner from "../../../components/other/LoadingSpinner";
-
-interface CurrencyProps {
-
-}
 
 const CurrWrapper = styled.div`
   &>div{
@@ -32,7 +30,7 @@ const CurrWrapper = styled.div`
       border: transparent;
     }
     input{
-      width: 40%;
+      width: 52%;
       padding-inline: 8px;
       box-sizing: border-box;
       outline: none;
@@ -63,13 +61,6 @@ const CurrWrapper = styled.div`
   }
 `;
 
-const Option: FC<{value: any}> = ({value}) => {
-    return(
-        <option value={value}>
-            {value.toUpperCase()}
-        </option>
-    )
-};
 interface CurrencyData {
     result: string;
     documentation: string;
@@ -82,27 +73,33 @@ interface CurrencyData {
     conversion_rates: Record<string, number>;
 }
 
-const Currency: FC<CurrencyProps>  = () => {
+const Option: FC<{value: string}> = ({value}) => {
+    return(
+        <option value={value}>
+            {value.toUpperCase()}
+        </option>
+    )
+};
+
+const Currency: FC<{}>  = () => {
     const dispatch = useDispatch();
     const {currList,curr1,curr2,curr1Value,curr2Value} = useSelector(
         (state: RootState) => state.currencyReducer);
     const apiKey = '6c9049512ebc46b1d38c3627';
     const apiUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${curr2}`;
+    const [input1Value,setInput1Value] = useState<string>('');
+    const [input2Value,setInput2Value] = useState<string>('');
     const [isFocused1, setIsFocused1] = useState<boolean>(false);
     const [isFocused2, setIsFocused2] = useState<boolean>(false);
     const [isSelected1, setIsSelected1] = useState<boolean>(false);
     const [isSelected2, setIsSelected2] = useState<boolean>(false);
 
     const {data, error, isLoading} = useFetch<CurrencyData>(apiUrl);
-    useEffect(()=>{
-        error && alert(error);
-        data &&
-            dispatch(setCurrList(data.conversion_rates));
-        console.log(data)
-    },[data]);
 
     const setEmptyValueAction = () => {
         dispatch(setEmptyValue());
+        setInput1Value('');
+        setInput2Value('');
     };
     const handleMultiply = (x: number,y: number): number => {
       return x * y;
@@ -110,33 +107,45 @@ const Currency: FC<CurrencyProps>  = () => {
     const handleDivide = (x: number, y: number): number => {
         return x / y;
     };
-    useEffect(() => {
-        if (!+curr1Value || !+curr2Value) {
-            setEmptyValueAction();
-        }
-    }, [curr1Value, curr2Value]);
-
     const setCurr1Action = (event) => {
         dispatch(setCurr1(event.target.value as string));
     };
     const setCurr2Action = (event) => {
         dispatch(setCurr2(event.target.value as string));
     };
-
-    const setCurr1ValueAction = (event) => {
-        const value = event.target.value as string;
+    const setCurr1ValueAction = (value: string) => {
+        const convertedValue = handleDivide(+value,+currList[curr1]);
+        setInput1Value(value);
         dispatch(setCurr1Value(value));
-        dispatch(setCurr2Value(handleDivide(+value,+currList[curr1])
+        dispatch(setCurr2Value(convertedValue
             .toFixed(3).toString())
         );
     };
-    const setCurr2ValueAction = (event) => {
-        const value = event.target.value as string;
+    const setCurr2ValueAction = (value: string) => {
+        const convertedValue = handleMultiply(+value,+currList[curr1]);
+        setInput2Value(value);
         dispatch(setCurr2Value(value));
-        dispatch(setCurr1Value(handleMultiply(+value,+currList[curr1])
+        dispatch(setCurr1Value(convertedValue
             .toFixed(3).toString())
         );
     };
+
+    useEffect(() => {
+        if (!+curr1Value || !+curr2Value) {
+            setEmptyValueAction();
+        }
+    }, [curr1Value, curr2Value]);
+    useEffect(()=>{
+        setCurr1ValueAction(input1Value);
+    },[curr1]);
+    useEffect(()=>{
+        setCurr2ValueAction(input2Value);
+    },[curr2]);
+    useEffect(()=>{
+        error && alert(error);
+        data &&
+        dispatch(setCurrList(data.conversion_rates));
+    },[data]);
 
     return isLoading && currList ?<LoadingSpinner/> :(
         <CurrWrapper>
@@ -147,7 +156,7 @@ const Currency: FC<CurrencyProps>  = () => {
             >
                 <input
                     value={curr1Value}
-                    onChange={setCurr1ValueAction}
+                    onChange={(event) => setCurr1ValueAction(event.target.value)}
                 />
                 <hr/>
                 <select
@@ -163,8 +172,8 @@ const Currency: FC<CurrencyProps>  = () => {
                         <option value="">Выберите валюту</option>
                     }
                     {
-                        Object.entries(currList).map(([key,value])=>{
-                            return <Option value={key}/>
+                        Object.entries(currList).map(([key])=>{
+                            return <Option value={key} key={key}/>
                         })
                     }
                 </select>
@@ -177,7 +186,7 @@ const Currency: FC<CurrencyProps>  = () => {
             >
                 <input
                     value={curr2Value}
-                    onChange={setCurr2ValueAction}
+                    onChange={(event) => setCurr2ValueAction(event.target.value)}
                 />
                 <hr/>
                 <select
@@ -193,8 +202,8 @@ const Currency: FC<CurrencyProps>  = () => {
                         <option value="">Выберите валюту</option>
                     }
                     {
-                        Object.entries(currList).map(([key,value]) =>
-                            <Option value={key}/>
+                        Object.entries(currList).map(([key]) =>
+                            <Option value={key} key={key}/>
                         )
                     }
                 </select>

@@ -1,55 +1,52 @@
-import React,{FC,useState} from 'react';
+import React,{FC,useState,Dispatch} from 'react';
+import {UnknownAction} from "redux";
 import styled from "styled-components";
+import {flexCenter_column} from "../../styles/styles";
 
-// типы указаны временно
 interface RenderFormProps {
-    dispatch: any,
+    dispatch: Dispatch<UnknownAction>,
     setCityName: any,
-    setDaysCount: any,
 }
 
-const Form = styled.div`
-  
+const Form = styled.form`
+  ${flexCenter_column}
+  input,button{
+    padding: 4px 8px;
+  }
+  input{
+    margin-block: 4px;
+  }
+  button{
+    padding: 4px 8px;
+    cursor: pointer;
+  }
 `;
 
-const RenderForm: FC<RenderFormProps>  = ({dispatch,setCityName,setDaysCount}) => {
+const RenderForm: FC<RenderFormProps>  = ({dispatch,setCityName}) => {
     const [cityNameInput, setCityNameInput] = useState<string>('');
-    const [daysCountInput, setDaysCountInput] = useState<number>(1);
 
     const handleCityNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCityNameInput(event.target.value);
     };
-    const handleDaysCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDaysCountInput(+event.target.value);
-    };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if(!cityNameInput) return;
         dispatch(setCityName(cityNameInput));
-        dispatch(setDaysCount(Number(daysCountInput)));
+        setCityNameInput('');
     };
 
     return (
-        <Form>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    City Name:
-                    <input
-                        type="text"
-                        value={cityNameInput}
-                        onChange={handleCityNameChange}
-                    />
-                </label>
-                <label>
-                    Days Count:
-                    <input
-                        type="number"
-                        value={daysCountInput}
-                        onChange={handleDaysCountChange}
-                    />
-                </label>
-                <button type="submit">Submit</button>
-            </form>
+        <Form onSubmit={handleSubmit}>
+            <label>
+                <p>Город:</p>
+                <input
+                    type="text"
+                    value={cityNameInput}
+                    onChange={handleCityNameChange}
+                />
+            </label>
+            <button type="submit">Найти</button>
         </Form>
     );
 };

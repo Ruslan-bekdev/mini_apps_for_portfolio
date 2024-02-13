@@ -27,7 +27,6 @@ const Calc = styled.div`
 `;
 
 const Calculator:FC = () => {
-    // добавить иконки в мини апы
     const dispatch = useDispatch();
     const {preResult,result,errorMessage} =
         useSelector((state: RootState) => state.calculatorReducer);

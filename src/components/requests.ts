@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 
 export interface ObjectWithUnknownValue {
     [key: string]: unknown;
@@ -21,8 +21,8 @@ export const useFetch = <T>(url: string, options?: ObjectWithUnknownValue): Fetc
                 const responseData = await response.json();
 
                 response.ok
-                    ? setData(responseData)
-                    : setError(`Ошибка запроса на сервер! Код ошибки: ${response.status}`);
+                    ?setData(responseData)
+                    :setError(`Ошибка запроса на сервер! Код ошибки: ${response.status}`);
             } catch (error: any) {
                 setError(`Произошла ошибка${': ' + error.message}`);
             } finally {
@@ -33,5 +33,5 @@ export const useFetch = <T>(url: string, options?: ObjectWithUnknownValue): Fetc
         fetchData();
     }, [url, options]);
 
-    return { data, error, isLoading };
+    return {data, error, isLoading};
 };

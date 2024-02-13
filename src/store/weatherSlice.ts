@@ -1,33 +1,74 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {Data} from "../apps/weather/Weather";
+
+type InitialData = {
+    [key:string]: any,
+}
 
 type CalculatorState = {
-    data: any,
+    initialData: InitialData,
     cityName: string,
-    daysCount: number,
+    selectedDataDate: string
+    selectedData: Data[],
 }
 
 const initialState: CalculatorState = {
-    data: {},
+    initialData: [],
     cityName: '',
-    daysCount: 1,
+    selectedDataDate: '',
+    selectedData: [],
 };
 
 const weatherSlice = createSlice({
     reducers: {
-        setData: (state, action: PayloadAction<{}>) => {
-            state.data = action.payload;
+        setInitialData: (state, action: PayloadAction<InitialData>) => {
+            state.initialData = action.payload;
         },
         setCityName: (state, action: PayloadAction<string>) => {
             state.cityName = action.payload;
         },
-        setDaysCount: (state, action: PayloadAction<number>) => {
-            state.daysCount = action.payload;
-        },
         resetCityName: (state) => {
             state.cityName = '';
         },
-        resetDaysCount: (state) => {
-            state.daysCount = 1;
+        setSelectedDataDate: (state, action: PayloadAction<string>) => {
+            state.selectedDataDate = action.payload;
+        },
+        setNextSelectedDataDate: (state) => {
+            const isDataWithNewDate = (date) =>
+                state.initialData.list.some(
+                    data => data.dt_txt.date === date
+                );
+
+            const date = state.selectedDataDate;
+            const numberParts = date.split('-');
+            const newLastNumber = +numberParts[numberParts.length-1]+1;
+            let newDate: string;
+            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + newLastNumber;
+
+            if (isDataWithNewDate(newDate))
+                state.selectedDataDate = newDate;
+        },
+        setPrevSelectedDataDate: (state) => {
+            const isDataWithNewDate = (date) =>
+                state.initialData.list.some(
+                    data => data.dt_txt.date === date
+                );
+
+            const date = state.selectedDataDate;
+            const numberParts = date.split('-');
+            const newLastNumber = +numberParts[numberParts.length-1]-1;
+            let newDate: string;
+            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + newLastNumber;
+
+            if (isDataWithNewDate(newDate))
+                state.selectedDataDate = newDate;
+        },
+        setSelectedData: (state) => {
+            const allSelectedDayData =
+                state.initialData.list.filter((item)=>
+                    item.dt_txt.date === state.selectedDataDate
+            );
+            state.selectedData = allSelectedDayData;
         },
     },
     name: 'weatherSlice',
@@ -35,11 +76,13 @@ const weatherSlice = createSlice({
 });
 
 export const {
-    setData,
+    setInitialData,
     setCityName,
-    setDaysCount,
     resetCityName,
-    resetDaysCount,
+    setSelectedDataDate,
+    setNextSelectedDataDate,
+    setPrevSelectedDataDate,
+    setSelectedData,
 } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

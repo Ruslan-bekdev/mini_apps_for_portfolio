@@ -3,7 +3,7 @@ import {Operator} from "../../../configs/calc";
 
 interface RenderOperatorsProps {
     operators: Operator[],
-    handleClick: (operator: Operator) => any,
+    handleClick: (operator: Operator) => void,
 }
 
 const RenderOperators_right: FC<RenderOperatorsProps> = ({operators,handleClick}) => {

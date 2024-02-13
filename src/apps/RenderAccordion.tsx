@@ -5,8 +5,7 @@ import styled from "styled-components";
 import {colors, margins} from "../styles/styles";
 import {Accordion as Accord, AccordionDetails, AccordionSummary} from "@mui/material";
 import IconButton from "../components/other/IconButton";
-import TooltipImage from "../components/other/TooltipImage";
-import international from '../assets/icons/international.svg';
+import eye from '../assets/icons/eye.svg';
 
 const Accordion = styled(Accord)`
     background-color: ${colors.secondaryDark} !important;
@@ -23,9 +22,16 @@ const AccordionSum = styled(AccordionSummary)`
       text-decoration: underline;
       text-decoration-color: transparent;
       transition: text-decoration-color 0.3s ease;
-     }
-    &:hover h2{
+    }
+    @media (hover: hover) {
+      &:hover{
         text-decoration-color: inherit;
+      }
+    }
+    @media (hover: none) {
+      &:active{
+        text-decoration-color: inherit;
+      }
     }
 `;
 const AccordionDet = styled(AccordionDetails)`
@@ -66,8 +72,8 @@ const RenderAccordion:FC = () => {
                             <div >
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate eaque id ipsum pariatur perspiciatis!</p>
                                 <IconButton
-                                    label='Вперед'
-                                    icon={international}
+                                    label='Взглянуть'
+                                    icon={eye}
                                     iconLocation='before'
                                     onClick={()=>navigateTo(path)}
                                 />

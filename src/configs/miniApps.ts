@@ -21,13 +21,8 @@ export const miniAppsConfig:MiniAppsConfig[] = [
         element: createElement(Weather),
     },
     {
-        header: 'Конвертеры',
+        header: 'Конвертер валют',
         path: '/convertor',
         element: createElement(Currency),
-    },
-    {
-        header: 'Часы',
-        path: '#',
-        element: createElement(Calculator),
     },
 ];

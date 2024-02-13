@@ -27,9 +27,17 @@ const Button = styled.button`
     height: 24px;
     object-fit: contain;
   }
-  &:hover {
-    padding: 12px 24px;
-    border: 1px solid ${colors.secondaryLight};
+  @media(hover: hover){
+    &:hover {
+      padding: 12px 24px;
+      border: 1px solid ${colors.secondaryLight};
+    }
+  }
+  @media(hover: none){
+    &:active {
+      padding: 12px 24px;
+      border: 1px solid ${colors.secondaryLight};
+    }
   }
 `;
 

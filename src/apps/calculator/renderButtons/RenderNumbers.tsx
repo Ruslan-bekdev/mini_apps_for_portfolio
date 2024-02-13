@@ -2,7 +2,7 @@ import React,{FC} from 'react';
 
 interface RenderNumbersProps {
     numbers: number[],
-    action: (number: number) => any
+    action: (number: number) => void
 }
 
 const RenderNumbers: FC<RenderNumbersProps> = ({numbers,action}) => {

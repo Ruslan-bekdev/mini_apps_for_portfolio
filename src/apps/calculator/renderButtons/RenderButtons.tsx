@@ -7,10 +7,10 @@ import RenderOperators_top from "./RenderOperators_top";
 import {buttonsConfig, dispatchActionTypes, Operator} from "../../../configs/calc";
 
 interface RenderButtonsProps {
-    setValue: (value: string | number) => any,
-    handleBackspace: () => any,
-    setResult: () => any,
-    resetAll: () => any,
+    setValue: (value: string | number) => void,
+    handleBackspace: () => void,
+    setResult: () => void,
+    resetAll: () => void,
     buttonsWidth: number,
 }
 
@@ -59,11 +59,18 @@ const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
-
-    &:hover {
-
-      &::before {
-        opacity: 1;
+    @media (hover: hover) {
+      &:hover{
+        &::before {
+          opacity: 1;
+        }
+      }
+    }
+    @media (hover: none) {
+      &:active{
+        &::before {
+          opacity: 1;
+        }
       }
     }
   }
