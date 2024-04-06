@@ -7,7 +7,7 @@ import Modal from "./components/other/Modal";
 import RenderAccordion from "./apps/RenderAccordion";
 import {miniAppsConfig} from "./configs/miniApps";
 
-const AppContent = styled.div`
+const AppContent = styled.main`
     ${container},
 `;
 
@@ -24,11 +24,11 @@ const App:FC = () => {
                 <Route
                     path="/"
                     element={
-                        <div>
+                        <section>
                             <h1>Мини приложения</h1>
                             <RenderAccordion/>
                             <Outlet/>
-                        </div>
+                        </section>
                     }
                 >
                     {RenderRoutes()}

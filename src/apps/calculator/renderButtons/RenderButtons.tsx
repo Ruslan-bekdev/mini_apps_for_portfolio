@@ -31,7 +31,7 @@ const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
     left: 0;
   }
   .positionAction2{
-    right: ${(props) => props.buttonsWidth}px;
+    right: ${({buttonsWidth}) => buttonsWidth}px;
   }
 
   button {
@@ -43,8 +43,8 @@ const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
     border: 2px solid ${colors.mainDark};
     background-color: ${colors.secondaryDark};
     color: ${colors.mainLight};
-    width: ${(props) => props.buttonsWidth}px;
-    height: ${(props) => props.buttonsWidth}px;
+    width: ${({buttonsWidth}) => buttonsWidth}px;
+    height: ${({buttonsWidth}) => buttonsWidth}px;
 
     &::before {
       content: "";

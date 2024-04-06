@@ -41,7 +41,7 @@ const Button = styled.button`
   }
 `;
 
-const IconButton:FC<IconButtonProps> = ({label,icon,alt,iconLocation,onClick}) => {
+const IconButton:FC<IconButtonProps> = ({label,icon,alt = 'text',iconLocation,onClick}) => {
     return(
         <Button onClick={onClick}>
             {iconLocation === 'before' &&
