@@ -94,12 +94,12 @@ const Weather: FC = () => {
         <WeatherContent>
             {cityName
                 ?selectedData &&
-                <RenderWeatherPresent
-                    setPrevSelectedData={setPrevSelectedDataDateAction}
-                    setNextSelectedData={setNextSelectedDataDateAction}
-                    selectedDataDate={selectedDataDate}
-                    selectedData={selectedData}
-                />
+                    <RenderWeatherPresent
+                        setPrevSelectedData={setPrevSelectedDataDateAction}
+                        setNextSelectedData={setNextSelectedDataDateAction}
+                        selectedDataDate={selectedDataDate}
+                        selectedData={selectedData}
+                    />
                 :<div>Введите название Города</div>
             }
             <hr/>

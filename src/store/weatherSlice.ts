@@ -43,7 +43,7 @@ const weatherSlice = createSlice({
             const numberParts = date.split('-');
             const newLastNumber = +numberParts[numberParts.length-1]+1;
             let newDate: string;
-            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + newLastNumber;
+            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + (newLastNumber < 10 ?`0${newLastNumber}` :newLastNumber);
 
             if (isDataWithNewDate(newDate))
                 state.selectedDataDate = newDate;
@@ -58,7 +58,7 @@ const weatherSlice = createSlice({
             const numberParts = date.split('-');
             const newLastNumber = +numberParts[numberParts.length-1]-1;
             let newDate: string;
-            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + newLastNumber;
+            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + (newLastNumber < 10 ?`0${newLastNumber}` :newLastNumber);
 
             if (isDataWithNewDate(newDate))
                 state.selectedDataDate = newDate;

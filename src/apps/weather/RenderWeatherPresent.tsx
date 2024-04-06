@@ -15,6 +15,7 @@ const Weather = styled.div`
 `;
 const Date = styled.div`
   ${flexCenter};
+  gap: .2rem;
   button{
     width: 20px;
     height: 30px;
