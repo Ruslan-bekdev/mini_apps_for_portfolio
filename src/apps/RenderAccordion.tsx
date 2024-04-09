@@ -36,10 +36,8 @@ const AccordionSum = styled(AccordionSummary)`
 `;
 const AccordionDet = styled(AccordionDetails)`
     text-align: left;
-    >div{
-        >*:not(:first-child){
-            margin-top: ${margins.innerBlock};
-        }
+    p{
+        margin-bottom: ${margins.innerBlock};
     }
 `;
 
@@ -57,7 +55,7 @@ const RenderAccordion:FC = () => {
     return (
         <AccordionWrapper>
             {miniAppsConfig.map((item, index) => {
-                const {header,path} = item;
+                const {header,caption,path} = item;
 
                 return(
                     <Accordion
@@ -69,8 +67,8 @@ const RenderAccordion:FC = () => {
                             <h2>{header}</h2>
                         </AccordionSum>
                         <AccordionDet>
-                            <div >
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cupiditate eaque id ipsum pariatur perspiciatis!</p>
+                            <div>
+                                <p>{caption}</p>
                                 <IconButton
                                     label='Взглянуть'
                                     icon={eye}
