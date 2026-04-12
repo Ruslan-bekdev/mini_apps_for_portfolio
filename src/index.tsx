@@ -20,12 +20,12 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <Provider store={store}>
-        <React.StrictMode>
-            <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <GlobalStyle/>
-                <App/>
-            </BrowserRouter>
-        </React.StrictMode>
-    </Provider>
+    <React.StrictMode>
+        <Provider store={store}>
+                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                    <GlobalStyle/>
+                    <App/>
+                </BrowserRouter>
+        </Provider>
+    </React.StrictMode>
 );

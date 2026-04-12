@@ -9,6 +9,7 @@ import {useFetch, FetchResponse} from "../../components/requests";
 import {
     setInitialData,
     setCityName,
+    resetCityName,
     setSelectedDataDate,
     setNextSelectedDataDate,
     setPrevSelectedDataDate,
@@ -37,11 +38,10 @@ const WeatherContent = styled.div`
 
 const Weather: FC = () => {
     const dispatch = useDispatch();
-    const {cityName,selectedDataDate,selectedData} =
+    const {cityName,selectedDataDate,selectedData,initialData} =
         useSelector((state: RootState) => state.weatherReducer);
     const apiKey = 'e417df62e04d3b1b111abeab19cea714';
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=
-                ${cityName}&cnt=40&appid=${apiKey}`
+    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&cnt=40&appid=${apiKey}`;
     const {data, error, isLoading}: FetchResponse<any> = useFetch(apiUrl);
 
     const setNextSelectedDataDateAction = () => {
@@ -52,7 +52,10 @@ const Weather: FC = () => {
     };
 
     useEffect(() => {
-        error && console.log(error);
+        if (error) {
+            dispatch(setInitialData([]));
+            console.log(error);
+        }
         if (!data) return;
         const newDataWithDateAndTime =
         typeof data.list[0].dt_txt === "string"
@@ -92,20 +95,19 @@ const Weather: FC = () => {
 
     return isLoading ?<LoadingSpinner/> :(
         <WeatherContent>
-            {cityName
-                ?selectedData &&
-                    <RenderWeatherPresent
-                        setPrevSelectedData={setPrevSelectedDataDateAction}
-                        setNextSelectedData={setNextSelectedDataDateAction}
-                        selectedDataDate={selectedDataDate}
-                        selectedData={selectedData}
-                    />
-                :<div>Введите название Города</div>
+            {initialData.list && cityName &&
+                <RenderWeatherPresent
+                    setPrevSelectedData={setPrevSelectedDataDateAction}
+                    setNextSelectedData={setNextSelectedDataDateAction}
+                    selectedDataDate={selectedDataDate}
+                    selectedData={selectedData}
+                    cityName={initialData?.city?.name}
+                />
             }
-            <hr/>
             <RenderForm
                 dispatch={dispatch}
                 setCityName={setCityName}
+                resetCityName={resetCityName}
             />
         </WeatherContent>
     );

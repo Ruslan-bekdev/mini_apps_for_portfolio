@@ -10,23 +10,22 @@ export interface MiniAppsConfig {
     element: ReactElement;
 }
 
-export const miniAppsConfig:MiniAppsConfig[] = [
+export const miniAppsConfig: MiniAppsConfig[] = [
     {
-        header: 'Калькулятор',
-        caption: 'Самое сложное программой. Вместо самого простого строго последовательного набора чисел и выбора операции, я создал полноценный, автоматизированный инструмент, который максимально приближен к настоящему калькулятору. ' +
-            'В нем учтены все детали, возможные варианты ввода и обработки ошибок',
+        header: 'Calculator',
+        caption: 'A sophisticated calculation engine built with complex state logic. Unlike basic calculators, this tool mimics real-world device behavior, handling edge cases, input validation, and automated operation sequencing with high precision.',
         path: '/calc',
         element: createElement(Calculator),
     },
     {
-        header: 'Погода',
-        caption: 'Это, безусловно, самая полезная программа для повседневной жизни. Получите точный прогноз погоды для сотен городов, настроенный на дни и часы, с удобным интерфейсом.',
+        header: 'Weather Forecast',
+        caption: 'A dynamic weather application featuring real-time data integration. It provides detailed forecasts across hundreds of cities, organized by days and hours, wrapped in a responsive and user-friendly interface.',
         path: '/weather',
         element: createElement(Weather),
     },
     {
-        header: 'Конвертер валют',
-        caption: 'Какой набор программ был бы полным без конвертера валют? Постоянно обновляемый курс валют делает этот инструмент не только удобным, но и надежным источником актуальной информации о курсах валют.',
+        header: 'Currency Converter',
+        caption: 'A reliable financial utility that tracks global exchange rates. Featuring live updates and a clean UI, this tool ensures precise conversions for a seamless user experience when dealing with international currencies.',
         path: '/convertor',
         element: createElement(Currency),
     },

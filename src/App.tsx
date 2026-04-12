@@ -25,7 +25,7 @@ const App:FC = () => {
                     path="/"
                     element={
                         <section>
-                            <h1>Мини программы</h1>
+                            <h1>Mini Programs</h1>
                             <RenderAccordion/>
                             <Outlet/>
                         </section>

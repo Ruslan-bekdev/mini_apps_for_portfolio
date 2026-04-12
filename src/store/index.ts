@@ -15,7 +15,7 @@ const store = configureStore({
         currencyReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(createLogger(),thunk),
+        getDefaultMiddleware().concat(createLogger()),
 });
 
 export default store;
