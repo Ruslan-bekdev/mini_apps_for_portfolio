@@ -1,11 +1,11 @@
-import React,{FC,Fragment,ReactElement} from 'react';
+import React,{FC,ReactElement} from 'react';
 import styled from "styled-components";
 import {useLocation,useNavigate} from "react-router-dom";
 import {colors,flexCenter,flexCenter_column,justifyCenter_between,center_absolute} from "../../styles/styles";
 
 interface ModalProps {
     title: string,
-    content: ReactElement | string,
+    content: ReactElement,
 }
 
 const Overlay = styled.div`
@@ -60,15 +60,13 @@ const ModalContent = styled.div`
 const Modal:FC<ModalProps> = ({title,content}) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const isMainPage = (): boolean => {
-      return location.pathname === '/';
-    };
+    const isMainPage = location.pathname === '/'
     const handleClose = (): void => {
         navigate('/');
     };
 
-    return isMainPage()?null:(
-            <Fragment>
+    return isMainPage?null:(
+            <>
                 <Overlay/>
                 <ModalStyled>
                     <ModalHeader>
@@ -79,7 +77,7 @@ const Modal:FC<ModalProps> = ({title,content}) => {
                         {content}
                     </ModalContent>
                 </ModalStyled>
-            </Fragment>
+            </>
         )
 };
 

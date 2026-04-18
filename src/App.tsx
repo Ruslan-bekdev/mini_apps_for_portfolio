@@ -8,34 +8,32 @@ import RenderAccordion from "./apps/RenderAccordion";
 import {miniAppsConfig} from "./configs/miniApps";
 
 const AppContent = styled.main`
-    ${container},
+    ${container}
 `;
 
-const App:FC = () => {
-    const RenderRoutes= () => {
-        return Object.entries(miniAppsConfig).map(([key, value]) => {
-            return <Route key={key} path={value.path} element={<Modal title={value.header} content={value.element}/>} />;
-        });
-    };
-
-    return(
-        <AppContent>
-            <Routes>
+const App:FC = () => (
+    <AppContent>
+        <h1>Mini Apps</h1>
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <section>
+                        <h2>Mini Programs</h2>
+                        <RenderAccordion/>
+                        <Outlet/>
+                    </section>
+                }
+            >{miniAppsConfig.map(value =>
                 <Route
-                    path="/"
-                    element={
-                        <section>
-                            <h1>Mini Programs</h1>
-                            <RenderAccordion/>
-                            <Outlet/>
-                        </section>
-                    }
-                >
-                    {RenderRoutes()}
-                </Route>
-            </Routes>
-        </AppContent>
-    )
-}
+                    key={value.path}
+                    path={value.path}
+                    element={<Modal title={value.header}
+                    content={value.element}/>}
+                />
+            )}</Route>
+        </Routes>
+    </AppContent>
+)
 
 export default App;

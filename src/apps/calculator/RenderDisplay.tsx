@@ -4,7 +4,6 @@ import {PreResult} from "../../store/calculatorSlice";
 
 interface RenderDisplayProps {
     preResult: PreResult,
-    result: number,
     errorMessage: string | null,
 }
 
@@ -20,18 +19,9 @@ const DisplayWrapper = styled.div`
   }
 `;
 
-const RenderDisplay: FC<RenderDisplayProps> =
-    ({preResult,result,errorMessage}) => {
-
-        const showResult = () => {
-            return result ?result :preResult.join('');
-        }
-
-        return(
-            <DisplayWrapper>
-                <h2 className='value'>{errorMessage?errorMessage:showResult()}</h2>
-            </DisplayWrapper>
-        );
-};
+const RenderDisplay: FC<RenderDisplayProps> = ({preResult,errorMessage}) =>
+    <DisplayWrapper>
+        <h2 className='value'>{errorMessage?errorMessage:preResult.join('')}</h2>
+    </DisplayWrapper>
 
 export default RenderDisplay;

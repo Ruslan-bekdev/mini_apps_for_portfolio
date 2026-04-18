@@ -1,9 +1,10 @@
-import React,{FC} from "react";
+import React, {FC, ReactNode} from "react";
 import {CircularProgress} from "@mui/material";
 import {styled} from "styled-components";
 
 interface LoadingSpinnerProps {
-    value?: string;
+    value?: ReactNode;
+    size?: number;
 }
 const Loading = styled.div`
   display: flex;
@@ -11,10 +12,10 @@ const Loading = styled.div`
   font-size: 1.5rem;
 `;
 
-const LoadingSpinner: FC<LoadingSpinnerProps> = ({value = 'Загрузка...'}) => {
+const LoadingSpinner: FC<LoadingSpinnerProps> = ({value = 'Загрузка...', size = 40}) => {
   return (
       <Loading>
-          <CircularProgress/>
+          <CircularProgress size={size}/>
           <p>{value}</p>
       </Loading>
   )

@@ -1,74 +1,66 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Data} from "../apps/weather/Weather";
+import {WeatherItem} from "../apps/weather/Weather";
 
-type InitialData = {
-    [key:string]: any,
+interface WeatherResponse {
+    list: WeatherItem[];
+    city?: {
+        name: string;
+        country: string;
+    };
 }
 
-type CalculatorState = {
-    initialData: InitialData,
+type WeatherState = {
+    initialData: WeatherResponse | null,
     cityName: string,
     selectedDataDate: string
-    selectedData: Data[],
+    selectedData: WeatherItem[],
 }
 
-const initialState: CalculatorState = {
-    initialData: [],
+const initialState: WeatherState = {
+    initialData: null,
     cityName: '',
     selectedDataDate: '',
     selectedData: [],
 };
 
+const hasDataForDate = (data: WeatherResponse | null, date: string) => {
+    return data?.list.some(item => item.dt_txt.date === date) ?? false;
+};
+
 const weatherSlice = createSlice({
     reducers: {
-        setInitialData: (state, action: PayloadAction<InitialData>) => {
+        setInitialData: (state, action: PayloadAction<WeatherResponse>) => {
             state.initialData = action.payload;
+        },
+        resetInitialData: (state) => {
+            state.initialData = null;
         },
         setCityName: (state, action: PayloadAction<string>) => {
             state.cityName = action.payload;
         },
-        resetCityName: (state) => {
-            state.cityName = '';
-        },
         setSelectedDataDate: (state, action: PayloadAction<string>) => {
             state.selectedDataDate = action.payload;
         },
-        setNextSelectedDataDate: (state) => {
-            const isDataWithNewDate = (date) =>
-                state.initialData.list.some(
-                    data => data.dt_txt.date === date
-                );
+        updateSelectedDate: (state, action: PayloadAction<number>) => {
+            if (!state.selectedDataDate) return;
 
-            const date = state.selectedDataDate;
-            const numberParts = date.split('-');
-            const newLastNumber = +numberParts[numberParts.length-1]+1;
-            let newDate: string;
-            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + (newLastNumber < 10 ?`0${newLastNumber}` :newLastNumber);
+            const dateParts = state.selectedDataDate.split('-');
+            const lastPart = dateParts.pop();
+            if (!lastPart) return;
 
-            if (isDataWithNewDate(newDate))
+            const nextDay = +lastPart + action.payload;
+            const paddedDay = nextDay.toString().padStart(2, '0');
+            const newDate = [...dateParts, paddedDay].join('-');
+
+            if (hasDataForDate(state.initialData, newDate)) {
                 state.selectedDataDate = newDate;
-        },
-        setPrevSelectedDataDate: (state) => {
-            const isDataWithNewDate = (date) =>
-                state.initialData.list.some(
-                    data => data.dt_txt.date === date
-                );
-
-            const date = state.selectedDataDate;
-            const numberParts = date.split('-');
-            const newLastNumber = +numberParts[numberParts.length-1]-1;
-            let newDate: string;
-            newDate = date.slice(0,-numberParts[numberParts.length-1].length) + (newLastNumber < 10 ?`0${newLastNumber}` :newLastNumber);
-
-            if (isDataWithNewDate(newDate))
-                state.selectedDataDate = newDate;
+            }
         },
         setSelectedData: (state) => {
-            const allSelectedDayData =
-                state.initialData.list.filter((item)=>
-                    item.dt_txt.date === state.selectedDataDate
-            );
-            state.selectedData = allSelectedDayData;
+            if (!state.initialData) return;
+            state.selectedData = state.initialData.list.filter((item)=>
+                item.dt_txt.date === state.selectedDataDate
+            )
         },
     },
     name: 'weatherSlice',
@@ -77,12 +69,13 @@ const weatherSlice = createSlice({
 
 export const {
     setInitialData,
+    resetInitialData,
     setCityName,
-    resetCityName,
     setSelectedDataDate,
-    setNextSelectedDataDate,
-    setPrevSelectedDataDate,
     setSelectedData,
 } = weatherSlice.actions;
+
+export const setNextSelectedDataDate = () => weatherSlice.actions.updateSelectedDate(1);
+export const setPrevSelectedDataDate = () => weatherSlice.actions.updateSelectedDate(-1);
 
 export default weatherSlice.reducer;

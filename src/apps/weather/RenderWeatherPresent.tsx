@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Data} from "./Weather";
+import {WeatherItem} from "./Weather";
 import styled from "styled-components";
 import {flexCenter} from "../../styles/styles";
 
@@ -7,7 +7,7 @@ interface RenderWeatherPresentProps {
     setNextSelectedData: () => void,
     setPrevSelectedData: () => void,
     selectedDataDate: string,
-    selectedData: Data[],
+    selectedData: WeatherItem[],
     cityName: string,
 }
 
@@ -43,7 +43,7 @@ const CardContainer = styled.div`
   span {font-weight: bold;}
 `;
 
-const Card: FC<{data: Data, name: string}> = ({data,name}) => {
+const Card: FC<{data: WeatherItem, name: string}> = ({data,name}) => {
     if (!data) return null;
     return (
         <CardContainer>
@@ -62,7 +62,7 @@ const Card: FC<{data: Data, name: string}> = ({data,name}) => {
 
 const RenderWeatherPresent: FC<RenderWeatherPresentProps>  = ({selectedData,setNextSelectedData,setPrevSelectedData,cityName}) => {
     const [time,setTime] = useState<string>('0');
-    const [showedData,setShowedData] = useState<Data>(selectedData[time]);
+    const [showedData,setShowedData] = useState<WeatherItem>(selectedData[time]);
 
     const handleChangeTime = (event) => {
         setTime(event.target.value);

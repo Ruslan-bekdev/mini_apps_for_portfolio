@@ -9,25 +9,30 @@ import {useFetch, FetchResponse} from "../../components/requests";
 import {
     setInitialData,
     setCityName,
-    resetCityName,
     setSelectedDataDate,
     setNextSelectedDataDate,
     setPrevSelectedDataDate,
     setSelectedData,
+    resetInitialData,
 } from "../../store/weatherSlice";
 
-type NumberKeys = {
-    [key: string]: number;
+export interface RawWeatherData {
+    main: {
+        temp: number;
+        temp_min: number;
+        temp_max: number;
+        [key: string]: number;
+    };
+    weather: Array<{ main: string; description: string; [key: string]: any }>;
+    wind: { speed: number; [key: string]: number };
+    clouds: { all: number };
+    dt_txt: string;
 }
-type NumberOrStringKeys = {
-    [key: string]: number|string;
-}
-export type Data = {
-    main: NumberKeys,
-    weather: NumberOrStringKeys[],
-    wind: NumberKeys,
-    clouds: NumberKeys,
-    dt_txt: NumberKeys,
+export interface WeatherItem extends Omit<RawWeatherData, 'dt_txt'> {
+    dt_txt: {
+        date: string;
+        time: string;
+    };
 }
 
 const WeatherContent = styled.div`
@@ -41,7 +46,9 @@ const Weather: FC = () => {
     const {cityName,selectedDataDate,selectedData,initialData} =
         useSelector((state: RootState) => state.weatherReducer);
     const apiKey = 'e417df62e04d3b1b111abeab19cea714';
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&cnt=40&appid=${apiKey}`;
+    const apiUrl = cityName.trim()
+        ? `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(cityName.trim())}&cnt=40&appid=${apiKey}`
+        : null;
     const {data, error, isLoading}: FetchResponse<any> = useFetch(apiUrl);
 
     const setNextSelectedDataDateAction = () => {
@@ -51,63 +58,59 @@ const Weather: FC = () => {
       dispatch(setPrevSelectedDataDate());
     };
 
+    const transformWeatherData = (rawList: RawWeatherData[]): WeatherItem[] => {
+        return rawList.map(item => {
+            const [date, time] = item.dt_txt.split(' ');
+
+            return {
+                ...item,
+                main: {
+                    ...item.main,
+                    temp: item.main.temp - 273.15,
+                    temp_min: item.main.temp_min - 273.15,
+                    temp_max: item.main.temp_max - 273.15,
+                },
+                dt_txt: {date, time}
+            };
+        });
+    };
+
     useEffect(() => {
         if (error) {
-            dispatch(setInitialData([]));
+            // dispatch(resetInitialData());
             console.log(error);
+            console.log(apiUrl)
+            console.log(apiKey)
+            return;
         }
-        if (!data) return;
-        const newDataWithDateAndTime =
-        typeof data.list[0].dt_txt === "string"
-            ?data.list.map((item)=>{
-                const dateAndTime = item.dt_txt.split(' ');
-                return {
-                    ...item,
-                    dt_txt: {
-                        date: dateAndTime[0],
-                        time: dateAndTime[1],
-                    }
-                }
-            })
-            :data.list
-        const convertedToCelsius =
-            newDataWithDateAndTime.map((data) => {
-                return {
-                    ...data,
-                    main: {
-                        ...data.main,
-                        temp: data.main.temp - 273.15,
-                        temp_min: data.main.temp_min - 273.15,
-                        temp_max: data.main.temp_max - 273.15,
-                    }
-                }
-            });
-        const copiedData = {
+        if (!data?.list) return;
+        const formattedList = transformWeatherData(data.list);
+        const finalData = {
             ...data,
-            list: convertedToCelsius,
+            list: formattedList,
         };
-        dispatch(setInitialData(copiedData));
-        dispatch(setSelectedDataDate(copiedData.list[0].dt_txt.date));
+        dispatch(setInitialData(finalData));
+        dispatch(setSelectedDataDate(finalData.list[0].dt_txt.date));
     },[data]);
+
     useEffect(()=>{
         selectedDataDate && dispatch(setSelectedData());
     },[selectedDataDate,data]);
 
     return isLoading ?<LoadingSpinner/> :(
         <WeatherContent>
-            {initialData.list && cityName &&
+            {initialData && cityName &&
                 <RenderWeatherPresent
                     setPrevSelectedData={setPrevSelectedDataDateAction}
                     setNextSelectedData={setNextSelectedDataDateAction}
                     selectedDataDate={selectedDataDate}
                     selectedData={selectedData}
-                    cityName={initialData?.city?.name}
+                    cityName={initialData?.city?.name || ''}
                 />
             }
             <RenderForm
                 dispatch={dispatch}
                 setCityName={setCityName}
-                resetCityName={resetCityName}
             />
         </WeatherContent>
     );

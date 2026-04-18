@@ -6,7 +6,6 @@ import {flexCenter_column} from "../../styles/styles";
 interface RenderFormProps {
     dispatch: Dispatch<UnknownAction>,
     setCityName: any,
-    resetCityName: any,
 }
 
 const Form = styled.form`
@@ -33,7 +32,7 @@ const Form = styled.form`
     }
 `;
 
-const RenderForm: FC<RenderFormProps>  = ({dispatch,setCityName,resetCityName}) => {
+const RenderForm: FC<RenderFormProps>  = ({dispatch,setCityName}) => {
     const [cityNameInput, setCityNameInput] = useState<string>('');
 
     const handleCityNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

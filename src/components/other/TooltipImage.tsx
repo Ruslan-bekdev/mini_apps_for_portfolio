@@ -1,12 +1,11 @@
 import React, {FC} from 'react';
 import styled from "styled-components";
-import {Tooltip} from "@mui/material";
+import {Tooltip, TooltipProps} from "@mui/material";
 
-type TooltipPlacement = typeof allPlacement[number];
 
 interface TooltipImageProps{
     title:string,
-    placement?:TooltipPlacement,
+    placement?: TooltipProps['placement'],
     image:string,
     alt?:string,
 }
@@ -23,16 +22,6 @@ const Image = styled.img`
     }
   }
 `;
-
-const basePlacements = ['top','bottom','left','right'] as const;
-const getAllPlacements = () => {
-    return basePlacements.flatMap((placement)=> [
-        placement,
-        `${placement}-start` as const,
-        `${placement}-end` as const,
-    ]);
-};
-const allPlacement = getAllPlacements();
 
 
 const TooltipImage:FC<TooltipImageProps> = ({title,placement,image,alt}) => {

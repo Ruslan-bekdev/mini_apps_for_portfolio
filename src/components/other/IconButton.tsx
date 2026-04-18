@@ -1,13 +1,13 @@
-import React,{FC} from 'react';
+import React,{FC, ReactNode} from 'react';
 import styled from "styled-components";
 import {colors, flexCenter} from "../../styles/styles";
 
 interface IconButtonProps {
-    label?: string,
+    label?: ReactNode,
     icon: string,
     alt?: string,
     iconLocation: 'before' | 'after',
-    onClick: () => any,
+    onClick: () => void,
 }
 
 const Button = styled.button`

@@ -1,17 +1,15 @@
 import React,{FC} from 'react';
+import {useDispatch} from "react-redux";
+import {setValue} from "../../../store/calculatorSlice";
 
-interface RenderNumbersProps {
-    numbers: number[],
-    action: (number: number) => void
-}
-
-const RenderNumbers: FC<RenderNumbersProps> = ({numbers,action}) => {
+const RenderNumbers: FC<{numbers: number[]}> = ({numbers}) => {
+    const dispatch = useDispatch();
     return (
         <div className='numbers'>
             {numbers.map((number,index)=>
                 <button
-                    onClick={() => action(number)}
-                    key={index}>
+                    onClick={() => dispatch(setValue(number.toString()))}
+                    key={number}>
                     {number}
                 </button>
             )}

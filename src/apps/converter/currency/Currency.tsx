@@ -10,9 +10,6 @@ import {
     setCurrList,
     setCurr1,
     setCurr2,
-    setCurr1Value,
-    setCurr2Value,
-    setEmptyValue,
 } from "../../../store/currencySlice";
 
 const CurrWrapper = styled.div`
@@ -81,12 +78,11 @@ const Option: FC<{value: string}> = ({value}) => {
     )
 };
 
-const Currency: FC<{}>  = () => {
+const Currency: FC  = () => {
     const dispatch = useDispatch();
-    const {currList,curr1,curr2,curr1Value,curr2Value} = useSelector(
-        (state: RootState) => state.currencyReducer);
+    const {currList,curr1,curr2} = useSelector((state: RootState) => state.currencyReducer);
     const apiKey = '6c9049512ebc46b1d38c3627';
-    const apiUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${curr2}`;
+    const apiUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${curr1}`;
     const [input1Value,setInput1Value] = useState<string>('');
     const [input2Value,setInput2Value] = useState<string>('');
     const [isFocused1, setIsFocused1] = useState<boolean>(false);
@@ -96,56 +92,35 @@ const Currency: FC<{}>  = () => {
 
     const {data, error, isLoading} = useFetch<CurrencyData>(apiUrl);
 
-    const setEmptyValueAction = () => {
-        dispatch(setEmptyValue());
-        setInput1Value('');
-        setInput2Value('');
-    };
-    const handleMultiply = (x: number,y: number): number => {
-      return x * y;
-    };
-    const handleDivide = (x: number, y: number): number => {
-        return x / y;
-    };
-    const setCurr1Action = (event) => {
-        dispatch(setCurr1(event.target.value as string));
-    };
-    const setCurr2Action = (event) => {
-        dispatch(setCurr2(event.target.value as string));
-    };
-    const setCurr1ValueAction = (value: string) => {
-        const convertedValue = handleDivide(+value,+currList[curr1]);
-        setInput1Value(value);
-        dispatch(setCurr1Value(value));
-        dispatch(setCurr2Value(convertedValue
-            .toFixed(3).toString())
-        );
-    };
-    const setCurr2ValueAction = (value: string) => {
-        const convertedValue = handleMultiply(+value,+currList[curr1]);
-        setInput2Value(value);
-        dispatch(setCurr2Value(value));
-        dispatch(setCurr1Value(convertedValue
-            .toFixed(3).toString())
-        );
+    const handleStringMultiply = (x: string | number,y: string | number): string =>
+        (Math.round(+x * +y * 100) / 100).toString();
+    const handleStringDivide = (x: string | number,y: string | number): string =>
+        (Math.round(+y / +x * 100) / 100).toString();
+    const setCalculatedValue = (value: string,currNum: 1 | 2) => {
+        if (value === "") {
+            setInput1Value("");
+            setInput2Value("");
+            return;
+        }
+
+        const result: string = currNum === 1
+            ?handleStringMultiply(value,currList[curr2])
+            :handleStringDivide(value,currList[curr2])
+
+        if (isNaN(+result) || !isFinite(+result)) return;
+
+        setInput1Value(currNum === 1 ?value :result);
+        setInput2Value(currNum === 1 ?result :value);
     };
 
-    useEffect(() => {
-        if (!+curr1Value || !+curr2Value) {
-            setEmptyValueAction();
-        }
-    }, [curr1Value, curr2Value]);
-    useEffect(()=>{
-        setCurr1ValueAction(input1Value);
-    },[curr1]);
-    useEffect(()=>{
-        setCurr2ValueAction(input2Value);
-    },[curr2]);
-    useEffect(()=>{
-        error && alert(error);
-        data &&
-        dispatch(setCurrList(data.conversion_rates));
+    useEffect(()=> setCalculatedValue(input1Value, 1),[curr1]);
+    useEffect(()=> setCalculatedValue(input2Value, 2),[curr2]);
+    useEffect(()=> {
+        data && dispatch(setCurrList(data.conversion_rates));
     },[data]);
+    useEffect(() => {
+        error && alert(`Ошибка API: ${error}`);
+    }, [error]);
 
     return isLoading && currList ?<LoadingSpinner/> :(
         <CurrWrapper>
@@ -155,27 +130,21 @@ const Currency: FC<{}>  = () => {
                 className={isFocused1 ?'focused' :''}
             >
                 <input
-                    value={curr1Value}
-                    onChange={(event) => setCurr1ValueAction(event.target.value)}
+                    value={input1Value}
+                    onChange={(event) => setCalculatedValue(event.target.value, 1)}
                 />
                 <hr/>
                 <select
                     value={curr1}
-                    onChange={setCurr1Action}
+                    onChange={e => dispatch(setCurr1(e.target.value as string))}
                     onFocus={()=>setIsSelected1(true)}
                     onBlur={()=>setIsSelected1(false)}
                     className={isSelected1 ?'selected' :''}
                     id="currency1" name="currency1"
                 >
-                    {
-                        !curr1 &&
-                        <option value="">Выберите валюту</option>
-                    }
-                    {
-                        Object.entries(currList).map(([key])=>{
-                            return <Option value={key} key={key}/>
-                        })
-                    }
+                    {!curr1 && <option value="">Выберите валюту</option>}
+                    {Object.entries(currList).map(([key])=>
+                            <Option value={key} key={key}/>)}
                 </select>
             </div>
 
@@ -185,27 +154,22 @@ const Currency: FC<{}>  = () => {
                 className={isFocused2 ?'focused' :''}
             >
                 <input
-                    value={curr2Value}
-                    onChange={(event) => setCurr2ValueAction(event.target.value)}
+                    value={input2Value}
+                    onChange={(e) => setCalculatedValue(e.target.value, 2)}
                 />
                 <hr/>
                 <select
                     value={curr2}
-                    onChange={setCurr2Action}
+                    onChange={e => dispatch(setCurr2(e.target.value as string))}
                     onFocus={()=>setIsSelected2(true)}
                     onBlur={()=>setIsSelected2(false)}
                     className={isSelected2 ?'selected' :''}
                     id="currency2" name="currency2"
                 >
-                    {
-                        !curr2 &&
-                        <option value="">Выберите валюту</option>
-                    }
-                    {
-                        Object.entries(currList).map(([key]) =>
-                            <Option value={key} key={key}/>
-                        )
-                    }
+                    {!curr2 && <option value="">Select currency</option>}
+                    {Object.entries(currList).map(([key]) =>
+                        <Option value={key} key={key}/>
+                    )}
                 </select>
             </div>
         </CurrWrapper>

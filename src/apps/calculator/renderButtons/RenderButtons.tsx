@@ -1,18 +1,12 @@
-import React, {FC,useEffect} from 'react';
+import React, {FC} from 'react';
 import styled from "styled-components";
 import {colors, flexCenter_column} from "../../../styles/styles";
 import RenderNumbers from "./RenderNumbers";
 import RenderOperators_right from "./RenderOperators_right";
 import RenderOperators_top from "./RenderOperators_top";
 import {buttonsConfig, dispatchActionTypes, Operator} from "../../../configs/calc";
-
-interface RenderButtonsProps {
-    setValue: (value: string | number) => void,
-    handleBackspace: () => void,
-    setResult: () => void,
-    resetAll: () => void,
-    buttonsWidth: number,
-}
+import {useDispatch} from "react-redux";
+import {handleBackspace, resetAll, setResult, setValue} from "../../../store/calculatorSlice";
 
 const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
   width: 100%;
@@ -80,85 +74,44 @@ const ButtonsWrapper = styled.div<{buttonsWidth: number}>`
   }
 `;
 
-const RenderCalc:FC<RenderButtonsProps> =
-    ({setValue,handleBackspace,setResult,resetAll,buttonsWidth}) => {
-        const handleClick = (operator): void => {
-            console.log(operator)
-            switch (operator.dispatchAction) {
-                case dispatchActionTypes.backspace: {
-                    handleBackspace();
-                    break;
-                }
-                case dispatchActionTypes.equal: {
-                    setResult();
-                    break;
-                }
-                case dispatchActionTypes.reset: {
-                    resetAll();
-                    break;
-                }
-                default: setValue(operator.value);
+const RenderButtons:FC<{buttonsWidth: number}> = ({buttonsWidth}) => {
+    const dispatch = useDispatch();
+
+    const handleClick = (operator: Operator): void => {
+        switch (operator.dispatchAction) {
+            case dispatchActionTypes.backspace: {
+                dispatch(handleBackspace());
+                break;
             }
-        };
-        const handleKey = (operatorValue): void => {
-            switch (operatorValue) {
-                case dispatchActionTypes.backspace: {
-                    handleBackspace();
-                    break;
-                }
-                case dispatchActionTypes.reset: {
-                    resetAll();
-                    break;
-                }
+            case dispatchActionTypes.equal: {
+                dispatch(setResult());
+                break;
             }
-        };
+            case dispatchActionTypes.reset: {
+                dispatch(resetAll());
+                break;
+            }
+            default: dispatch(setValue(operator.value));
+        }
+    };
 
-        useEffect(()=>{
-            const handleKeyDown = (event) => {
-                const {key} = event;
-
-                if ((key >= '0' && key <= '9')){
-                    return setValue(key);
-                }
-
-                switch (key) {
-                    case 'Backspace': {
-                        handleKey(dispatchActionTypes.backspace);
-                        break;
-                    }
-                    case 'c': {
-                        handleKey(dispatchActionTypes.reset);
-                        break;
-                    }
-                }
-            };
-
-            window.addEventListener('keydown', handleKeyDown);
-
-            return () =>
-                window.removeEventListener('keydown', handleKeyDown);
-        },[]);
-
-        return (
-            <ButtonsWrapper buttonsWidth={buttonsWidth}>
-                <div className='block'>
-                    <RenderOperators_top
-                        operators={buttonsConfig.operators.top}
-                        handleClick={handleClick}
-                    />
-                    <RenderNumbers
-                        numbers={buttonsConfig.numbers}
-                        action={setValue}
-                    />
-                </div>
-                <div className='block'>
-                    <RenderOperators_right
-                        operators={buttonsConfig.operators.right as Operator[]}
-                        handleClick={handleClick}
-                    />
-                </div>
-            </ButtonsWrapper>
-        );
+    return (
+        <ButtonsWrapper buttonsWidth={buttonsWidth}>
+            <div className='block'>
+                <RenderOperators_top
+                    operators={buttonsConfig.operators.top}
+                    handleClick={handleClick}
+                />
+                <RenderNumbers numbers={buttonsConfig.numbers}/>
+            </div>
+            <div className='block'>
+                <RenderOperators_right
+                    operators={buttonsConfig.operators.right as Operator[]}
+                    handleClick={handleClick}
+                />
+            </div>
+        </ButtonsWrapper>
+    );
 };
 
-export default RenderCalc;
+export default RenderButtons;
