@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {BrowserRouter} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from './store'
 import {createGlobalStyle} from "styled-components";
@@ -22,10 +22,10 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <HashRouter>
                     <GlobalStyle/>
                     <App/>
-                </BrowserRouter>
+                </HashRouter>
         </Provider>
     </React.StrictMode>
 );
