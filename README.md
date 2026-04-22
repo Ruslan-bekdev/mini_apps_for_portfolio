@@ -1,46 +1,31 @@
-# Getting Started with Create React App
+# Mini-Apps Collection (TypeScript Logic Lab)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A showcase of functional web applications focused on complex business logic, strict typing, and reliable state management. 
 
-## Available Scripts
+## [Live Demo](https://ruslan-bekdev.github.io/mini_apps_for_portfolio/)
 
-In the project directory, you can run:
+## Why TypeScript?
+The primary goal of this project was to implement robust logic using **TypeScript**. By leveraging static typing, I ensured data integrity across the apps, specifically handling complex objects and custom types.
 
-### `npm start`
+## Key Features
+* **Advanced Calculator:** Built with a custom expression parsing engine. It includes protection against mathematical errors (division by zero, invalid syntax) and handles decimal precision.
+* **State Management:** Fully powered by **Redux Toolkit**. Demonstrates a professional approach to handling global state, slices, and predictable data flow.
+* **Logic-Centric UI:** While the design is kept minimal, the focus is entirely on the "under the hood" operations, data validation, and edge-case handling.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technical Highlights
+* **Strict Typing:** Used TS interfaces and types to define application state and component props.
+* **Scalable Architecture:** Each mini-app is an independent module, making the collection easily extendable.
+* **Error Resilience:** Implemented validation layers to prevent crashes during complex logical operations.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Tech Stack
+* **React** + **TypeScript**
+* **Redux Toolkit** (State Management)
+* **CSS Modules** (Scoped Styling)
 
-### `npm test`
+## Purpose
+This collection serves as a testament to my ability to handle "heavy" frontend logic. It’s a playground where I solve algorithmic challenges and refine my architectural skills using the industry-standard TypeScript.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## How to run locally
+1. `git clone https://github.com/Ruslan-bekdev/mini-apps.git`
+2. `npm install`
+3. `npm start`
