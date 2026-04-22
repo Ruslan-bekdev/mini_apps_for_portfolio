@@ -70,7 +70,7 @@ const RenderAccordion:FC = () => {
                             <div>
                                 <p>{caption}</p>
                                 <IconButton
-                                    label='Взглянуть'
+                                    label='Show'
                                     icon={eye}
                                     iconLocation='before'
                                     onClick={()=>navigateTo(path)}
