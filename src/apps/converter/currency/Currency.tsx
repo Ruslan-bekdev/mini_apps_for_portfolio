@@ -52,9 +52,10 @@ const CurrWrapper = styled.div`
   }
   .focused{
     outline: 1px solid ${colors.secondaryLight};
-  }
-  .selected{
-    background-color: ${colors.mainDark};
+      
+    select{
+      background-color: ${colors.mainDark};
+    }
   }
 `;
 
@@ -87,8 +88,6 @@ const Currency: FC  = () => {
     const [input2Value,setInput2Value] = useState<string>('');
     const [isFocused1, setIsFocused1] = useState<boolean>(false);
     const [isFocused2, setIsFocused2] = useState<boolean>(false);
-    const [isSelected1, setIsSelected1] = useState<boolean>(false);
-    const [isSelected2, setIsSelected2] = useState<boolean>(false);
 
     const {data, error, isLoading} = useFetch<CurrencyData>(apiUrl);
 
@@ -137,9 +136,6 @@ const Currency: FC  = () => {
                 <select
                     value={curr1}
                     onChange={e => dispatch(setCurr1(e.target.value as string))}
-                    onFocus={()=>setIsSelected1(true)}
-                    onBlur={()=>setIsSelected1(false)}
-                    className={isSelected1 ?'selected' :''}
                     id="currency1" name="currency1"
                 >
                     {!curr1 && <option value="">Выберите валюту</option>}
@@ -161,9 +157,6 @@ const Currency: FC  = () => {
                 <select
                     value={curr2}
                     onChange={e => dispatch(setCurr2(e.target.value as string))}
-                    onFocus={()=>setIsSelected2(true)}
-                    onBlur={()=>setIsSelected2(false)}
-                    className={isSelected2 ?'selected' :''}
                     id="currency2" name="currency2"
                 >
                     {!curr2 && <option value="">Select currency</option>}

@@ -14,6 +14,7 @@ const Accordion = styled(Accord)`
 `;
 const AccordionWrapper = styled.div`
     margin-top: ${margins.title};
+    padding-bottom: 15dvh;
 `;
 const AccordionSum = styled(AccordionSummary)`
     h2{
